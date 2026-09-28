@@ -97,16 +97,6 @@ object DelegatedCarrierConfigOverride {
     ) {
         val manager = context.getSystemService(CarrierConfigManager::class.java)
             ?: throw IllegalStateException("无法获取 CarrierConfigManager")
-        val method = manager.javaClass.getMethod(
-            "overrideConfig",
-            Int::class.javaPrimitiveType,
-            PersistableBundle::class.java,
-            Boolean::class.javaPrimitiveType
-        )
-        try {
-            method.invoke(manager, subId, bundle, persistent)
-        } catch (e: InvocationTargetException) {
-            throw e.targetException ?: e
-        }
+        CarrierConfigOverrideCompat.invoke(manager, subId, bundle, persistent)
     }
 }
